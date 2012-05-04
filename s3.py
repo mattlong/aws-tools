@@ -1,6 +1,7 @@
 import sys, os
 import csv
 
+#See http://aws.amazon.com/s3/faqs/#How_will_I_be_charged_and_billed_for_my_use_of_Amazon_S3
 csv_path = 'reports/report.csv'
 if len(sys.argv) > 1:
     filter_by_buckets = True
@@ -72,7 +73,7 @@ cost_tier1 = (float(tier1_requests) / 1000) * TIER1_REQUESTS_PER_K
 cost_tier2 = (float(tier2_requests) / 10000) * TIER2_REQUESTS_PER_10K
 
 storage_gb_hrs = float(storage_byte_hrs) / B_PER_GB
-storage_gb_months = float(storage_byte_hrs) / B_PER_GB / 720
+storage_gb_months = float(storage_byte_hrs) / B_PER_GB / 744
 cost_storage = storage_gb_months * STORAGE_PER_GB_PER_MONTH
 
 cost_total = cost_data_out + cost_tier1 + cost_tier2 + cost_storage
