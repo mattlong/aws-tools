@@ -60,9 +60,9 @@ for entry in csv.DictReader(csvfile):
         pass
 
 if filter_by_buckets:
-    print 'Cost for these buckets: %s\n' % ', '.join(buckets)
+    print 'Cost for these buckets: %s' % ', '.join(buckets)
 else:
-    print 'Cost for all buckets\n'
+    print 'Cost for all buckets'
 
 #data out
 data_out_gb = float(data_out_bytes) / B_PER_GB
@@ -78,9 +78,11 @@ cost_storage = storage_gb_months * STORAGE_PER_GB_PER_MONTH
 
 cost_total = cost_data_out + cost_tier1 + cost_tier2 + cost_storage
 
-print '$%.2f data out' % (cost_data_out,)
-print '$%.2f tier1 requests' % (cost_tier1,)
-print '$%.2f tier2 requests' % (cost_tier2,)
-print '$%.2f storage' % (cost_storage,)
-print
-print '$%.2f total' % (cost_total,)
+print '''
+  $%.2f data out
+  $%.2f tier1 requests
+  $%.2f tier2 requests
+  $%.2f storage
+
+  $%.2f total
+''' % (cost_data_out, cost_tier1, cost_tier2, cost_storage, cost_total,)
