@@ -14,13 +14,7 @@ if len(sys.argv) == 1:
 
 account = sys.argv[1].lower()
 tier = sys.argv[2] if len(sys.argv) > 2 else 'production'
-
-conn = boto.connect_ec2()
-
-TIER = 'production'
-#TIER = 'staging'
-#NAME = 'batch-processor'
-ROLE = 'pdfworker'
+grouping_tag = 'role'
 
 filters = {
     'instance-state-name': 'running',
@@ -35,37 +29,27 @@ if account.lower() == 'fat':
     })
 else:
     filters.update({
-        'tag:tier':TIER,
+        'tag:tier':tier,
         #'tag:Name':NAME,
         #'tag:role':ROLE,
     })
 
 print filters
 
-#filters = {
-#    'instance-state-name': 'running',
-#
-#    #v2
-#    #'tag:tier':TIER,
-#    #'tag:role':'pdfworker',
-#    #'image-id': 'ami-baba68d3',
-#    #'group-name': 'pdfworker',
-#}
-
 instances = [i for r in conn.get_all_instances(filters=filters) for i in r.instances]
 
-name_counts = { '': 0 }
+group_counts = { '': 0 }
 for i in instances:
-    name = i.tags.get('Name', '<Empty>')
-    name_counts[name] = name_counts.get(name, 0) + 1
-    name_counts[''] += 1
+    group = i.tags.get(grouping_tag, '<Empty>')
+    group_counts[group] = group_counts.get(group, 0) + 1
+    group_counts[''] += 1
 
 def make_csshX(instances):
     cmd = 'csshX --login ubuntu '
     cmd += str.join(' ', [instance.public_dns_name for instance in instances])
     print cmd
 
-for (name, count) in name_counts.items():
-    print name, count
-    make_csshX(filter(lambda i: i.tags.get('Name', '<Empty>').find(name) != -1, instances))
+for (group, count) in group_counts.items():
+    print group, count
+    make_csshX(filter(lambda i: i.tags.get(grouping_tag, '<Empty>') == group, instances))
     print
