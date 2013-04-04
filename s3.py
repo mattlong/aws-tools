@@ -11,10 +11,10 @@ else:
     buckets = None
 
 #TODO: right now we'll only using the first tier prices. will require some modifications to support tiered pricing
-DATA_OUT_PER_GB = 0.125
-TIER1_REQUESTS_PER_K = 0.01
-TIER2_REQUESTS_PER_10K = 0.01
-STORAGE_PER_GB_PER_MONTH = 0.125
+DATA_OUT_PER_GB = 0.12
+TIER1_REQUESTS_PER_K = 0.005
+TIER2_REQUESTS_PER_10K = 0.004
+STORAGE_PER_GB_PER_MONTH = 0.095
 
 B_PER_GB = 1073741824L
 
@@ -23,20 +23,21 @@ tier1_requests = 0
 tier2_requests = 0
 storage_byte_hrs = 0
 
-csvfile = open(csv_path, 'r')
+csvfile = open(csv_path, 'rU')
 for entry in csv.DictReader(csvfile):
+    entry = {k.strip():v.strip() for k,v in entry.iteritems()}
 
     #filter by bucket
-    if filter_by_buckets and entry.get(' Resource') not in buckets: continue
+    if filter_by_buckets and entry.get('Resource') not in buckets: continue
 
     #parse fields
-    usage_type = entry.get(' UsageType')
+    usage_type = entry.get('UsageType')
     if usage_type.find('-Tier') > -1:
         usage_type, tier = usage_type.split('-')[0:2]
     else:
         tier = None
-    operation = entry.get(' Operation')
-    value = int(entry.get(' UsageValue'))
+    operation = entry.get('Operation')
+    value = int(float(entry.get('UsageValue')))
 
     if usage_type in ('DataTransfer-In-Bytes', 'C3DataTransfer-Out-Bytes', 'C3DataTransfer-In-Bytes', 'Requests-NoCharge', 'StorageObjectCount',):
         continue
