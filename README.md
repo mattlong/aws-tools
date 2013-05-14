@@ -1,5 +1,5 @@
-aws-billing
-===========
+aws-tools
+=========
 
 A collection of scripts for performing various tasks with AWS resources
 
