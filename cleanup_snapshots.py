@@ -1,6 +1,5 @@
 import sys, re
 
-import boto
 from boto.ec2.connection import EC2Connection
 
 try:
@@ -12,7 +11,7 @@ if len(sys.argv) == 1:
     print 'usage: python cleanup_snapshot.py <cluster> [<for_real>]'
     exit(0)
 
-cluster = sys.argv[1].lower()
+account = sys.argv[1].lower()
 FOR_REAL = (sys.argv[2] if len(sys.argv) > 2 else 'false').lower() == 'true'
 
 keys = settings.ACCOUNT_KEYS[account]

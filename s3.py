@@ -1,4 +1,4 @@
-import sys, os
+import sys
 import csv
 
 #See http://aws.amazon.com/s3/faqs/#How_will_I_be_charged_and_billed_for_my_use_of_Amazon_S3
